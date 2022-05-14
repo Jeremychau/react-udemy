@@ -2,6 +2,7 @@ import React from 'react'
 
 import Card from '../../shared/components/UIElements/Card'
 import PlaceItem from './PlaceItem'
+import Button from '../../shared/components/FormElements/Button'
 
 import './PlaceList.css'
 
@@ -14,6 +15,7 @@ const PlaceList = props => {
                         No Place Found.
                     </h2>
                     <button>Share Place</button>
+                    <Button to='/places/new'>Share</Button>
                 </Card>
             </div>
         )
