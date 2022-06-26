@@ -14,8 +14,8 @@ const PlaceList = props => {
                     <h2>
                         No Place Found.
                     </h2>
-                    <button>Share Place</button>
-                    <Button to='/places/new'>Share</Button>
+                    {/* <button>Share Place</button> */}
+                    <Button to='/places/new'>Add New</Button>
                 </Card>
             </div>
         )
@@ -25,16 +25,16 @@ const PlaceList = props => {
         <ul className='place-list'>
             {
                 props.items.map( (place, index) => (
-                    <PlaceItem
-                        key={index}
-                        id={place.id}
-                        image={place.imageUrl}
-                        title={place.title}
-                        description={place.description}
-                        address={place.address}
-                        creatorId={place.creator}
-                        coordinates={place.location}
-                    />
+                        <PlaceItem
+                            key={index}
+                            id={place._id}
+                            image={place.image}
+                            title={place.title}
+                            description={place.description}
+                            address={place.address}
+                            creatorId={place.creator}
+                            coordinates={place.location}
+                        />
                 ) )
             }
         </ul>

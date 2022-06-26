@@ -1,19 +1,38 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 
 import UsersList from '../components/UsersList'
+import ErrorModal from '../../shared/components/UIElements/ErrorModal';
+import LoadingSpinner from '../../shared/components/UIElements/LoadingSpinner';
+
+import { useHttpClient } from '../../shared/hooks/http-hook';
+
+// import api from "../../apiConfig";
 
 const Users = () => {
-    const USERS = [
-        {
-            id: 'u1',
-            name: 'Eunji',
-            image: 'https://post-phinf.pstatic.net/MjAyMjA0MTRfMTMz/MDAxNjQ5OTI5Mjk5Nzg2.Glcp4trcvGaCTp0l0_J_G836YkrDwzA49gk0gl4neScg.zzZ5wkqQNV3vzG4Qp3LxStd7LnbJOB14NjxXcfxAtVAg.JPEG/56.jpg?type=w1200',
-            places: 1
+    const [loadedUsers, setLoadedUsers] = useState([])
+
+    const { isLoading, error, setError, sendReq } = useHttpClient();
+
+    useEffect(() => {
+        const getUser = async() => {
+            try {
+                let result = await sendReq('/users', 'get', '')
+                setLoadedUsers(result)
+            } catch (err) {
+                setError(err.message || 'Something Error');
+            }
         }
-    ]
+        getUser()
+    }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
     return (
-        <UsersList items={USERS}/>
+        <React.Fragment>
+            <ErrorModal error={error} onClear={ () => setError(null)} />
+            { isLoading && <div className='center'>
+                <LoadingSpinner/>
+            </div> }
+            { !isLoading && loadedUsers && <UsersList items={loadedUsers} /> }
+        </React.Fragment>
     )
 }
 

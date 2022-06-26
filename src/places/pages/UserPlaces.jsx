@@ -1,41 +1,36 @@
-import React from 'react'
+import React, {useState, useEffect} from 'react'
 import { useParams } from 'react-router-dom'
 
 import PlaceList from '../components/PlaceList'
+import ErrorModal from "../../shared/components/UIElements/ErrorModal";
+import LoadingSpinner from "../../shared/components/UIElements/LoadingSpinner";
 
-const DUMMY_PLACES = [
-    {
-        id: 'p1',
-        title: 'Empire State Byulding',
-        description: 'One of the most famous sky scrapers in the world',
-        imageUrl: 'https://post-phinf.pstatic.net/MjAyMjA0MTRfODIg/MDAxNjQ5OTI2NzM0Mzg3.nMl28FCPDIu1SQE5mUGUQQEI7hXS2n7OAVkc78UJHj8g.cb9ULN9Q-i0nz6ifaWXCfusozlHnYKDwwH-KtuJ-RRgg.JPEG/3.jpg?type=w1200',
-        address: 'Myeong-dong',
-        location: {
-            lat: 37.5615682,
-            lng: 126.9733249
-        },
-        creator: 'u1'
-    },
-    {
-        id: 'p1',
-        title: 'Empire State Byulding',
-        description: 'One of the most famous sky scrapers in the world',
-        imageUrl: 'https://post-phinf.pstatic.net/MjAyMjA0MTRfODIg/MDAxNjQ5OTI2NzM0Mzg3.nMl28FCPDIu1SQE5mUGUQQEI7hXS2n7OAVkc78UJHj8g.cb9ULN9Q-i0nz6ifaWXCfusozlHnYKDwwH-KtuJ-RRgg.JPEG/3.jpg?type=w1200',
-        address: 'Myeong-dong',
-        location: {
-            lat: 37.5615682,
-            lng: 126.9733249
-        },
-        creator: 'u3'
-    },
-]
+import { useHttpClient } from '../../shared/hooks/http-hook'
 
 const UserPlaces = () => {
+    const [loadedPlaces, setLoadedPlaces] = useState();
+    const {isLoading, error, sendReq, clearError} = useHttpClient();
     const userId = useParams().userId;
-    const loadedPlaces = DUMMY_PLACES.filter( place => place.creator === userId );
+
+    useEffect(() => {
+        const getPlaces = async() => {
+            try {
+                const result = await sendReq(`places/user/${userId}`)
+                setLoadedPlaces(result.places)
+            } catch (error) {
+                console.log(error);
+            }
+        }
+        getPlaces();
+    }, [sendReq, userId])
+
 
     return (
-        <PlaceList items={loadedPlaces} />
+        <React.Fragment>
+            <ErrorModal error={error} onClear={clearError} />
+            {isLoading &&  <div className='center'><LoadingSpinner asOverlay/></div>}
+            {!isLoading && loadedPlaces && <PlaceList items={loadedPlaces} />}
+        </React.Fragment>
     )
 }
 

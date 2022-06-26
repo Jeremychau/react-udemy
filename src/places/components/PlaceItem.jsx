@@ -25,9 +25,8 @@ const PlaceItem = props => {
 
     const confirmDeletHandler = () => {
         setShowConfirmModal( false )
-        console.log('gg');
     }
-
+    console.log(props);
   return (
     <React.Fragment>
         <Modal show={showMap} onCancel={ () => mapHandler()} header={props.address} contentClass="place-item__modal-content" footrtClass="plac-item__modal-actions" footer={<Button onClick={ () => mapHandler()} >Close</Button>}>
@@ -55,7 +54,7 @@ const PlaceItem = props => {
         <li className="place-item">
             <Card className="place-item__content">
                 <div className="place-item__image">
-                    <img src={props.image} alt={props.title} />
+                    <img src={`http://localhost:3030/${props.image}`} alt={props.title} />
                 </div>
                 <div className="place-item__info">
                     <h2>{props.title}</h2>
@@ -64,8 +63,8 @@ const PlaceItem = props => {
                 </div>
                 <div className="place-item__actions">
                     <Button inverse onClick={ () => mapHandler(true)} >View On Map</Button>
-                    {auth.isLoggedIn && <Button to={`/places/${props.id}`} >Edit</Button>}
-                    {auth.isLoggedIn && <Button danger onClick={ () => showWarningHandler(true)} >Delete</Button>}
+                    {auth.userId === props.creatorId && <Button to={`/places/${props.id}`} >Edit</Button>}
+                    {auth.userId === props.creatorId && <Button danger onClick={ () => showWarningHandler(true)} >Delete</Button>}
                 </div>
             </Card>
         </li>
