@@ -39,7 +39,7 @@ const Auth = () => {
                     email: formState.inputs.email.value,
                     password: formState.inputs.password.value,
                 })
-                if(result) auth.login(result.user._id);
+                if(result) auth.login(result.user, result.token);
             } catch (err) {
              console.log(err);
             }

@@ -61,12 +61,11 @@ const UpdatePlace = () => {
 
     const updatePlaceDetail = async event => {
         event.preventDefault();
-        console.log(formState);
         try {
             let result = await sendReq(`/places/${placeId}`, 'patch', {
                 title: formState.inputs.title.value,
                 description: formState.inputs.description.value,
-            })
+            }, auth.token)
             if(result) history.push(`/${auth.userId}/places`);
         } catch (error) {
             console.log(error);

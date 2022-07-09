@@ -43,13 +43,14 @@ const NewPlace = () => {
     const placeSubmitHandler = async (event) => {
         event.preventDefault();
         try {
+            console.log(auth.token);
             const formData = new FormData();
             formData.append('title', formState.inputs.title.value)
             formData.append('description', formState.inputs.description.value)
             formData.append('address', formState.inputs.address.value)
-            formData.append('creator', auth.userId)
+            // formData.append('creator', auth.userId)
             formData.append('image', formState.inputs.image.value)
-            let result = await sendReq('/places', 'post', formData)
+            let result = await sendReq('/places', 'post', formData, auth.token)
             if(result) history.push('/');
         } catch (err) {}
     }
